@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MainViewController.h
 //  MobileHealthMonitoring
 //
 //  Created by Adriana Micu on 15/02/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MainViewController : UIViewController
 
 @end
-

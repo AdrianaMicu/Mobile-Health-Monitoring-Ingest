@@ -10,11 +10,12 @@
 		3A17F4951A90C90C0091DD5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4941A90C90C0091DD5F /* main.m */; };
 		3A17F4981A90C90C0091DD5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4971A90C90C0091DD5F /* AppDelegate.m */; };
 		3A17F49B1A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4991A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodeld */; };
-		3A17F49E1A90C90C0091DD5F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F49D1A90C90C0091DD5F /* ViewController.m */; };
+		3A17F49E1A90C90C0091DD5F /* SensorConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F49D1A90C90C0091DD5F /* SensorConnectionViewController.m */; };
 		3A17F4A11A90C90C0091DD5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A17F49F1A90C90C0091DD5F /* Main.storyboard */; };
 		3A17F4A31A90C90C0091DD5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A17F4A21A90C90C0091DD5F /* Images.xcassets */; };
 		3A17F4A61A90C90C0091DD5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A17F4A41A90C90C0091DD5F /* LaunchScreen.xib */; };
 		3A17F4B21A90C90C0091DD5F /* MobileHealthMonitoringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */; };
+		3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4BB1A90E7450091DD5F /* MainViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,14 +35,16 @@
 		3A17F4961A90C90C0091DD5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A17F4971A90C90C0091DD5F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3A17F49A1A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MobileHealthMonitoring.xcdatamodel; sourceTree = "<group>"; };
-		3A17F49C1A90C90C0091DD5F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3A17F49D1A90C90C0091DD5F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3A17F49C1A90C90C0091DD5F /* SensorConnectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensorConnectionViewController.h; sourceTree = "<group>"; };
+		3A17F49D1A90C90C0091DD5F /* SensorConnectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensorConnectionViewController.m; sourceTree = "<group>"; };
 		3A17F4A01A90C90C0091DD5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3A17F4A21A90C90C0091DD5F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3A17F4A51A90C90C0091DD5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3A17F4AB1A90C90C0091DD5F /* MobileHealthMonitoringTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileHealthMonitoringTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A17F4B01A90C90C0091DD5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileHealthMonitoringTests.m; sourceTree = "<group>"; };
+		3A17F4BB1A90E7450091DD5F /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		3A17F4BD1A90E7580091DD5F /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,12 +88,14 @@
 			children = (
 				3A17F4961A90C90C0091DD5F /* AppDelegate.h */,
 				3A17F4971A90C90C0091DD5F /* AppDelegate.m */,
-				3A17F49C1A90C90C0091DD5F /* ViewController.h */,
-				3A17F49D1A90C90C0091DD5F /* ViewController.m */,
-				3A17F49F1A90C90C0091DD5F /* Main.storyboard */,
 				3A17F4A21A90C90C0091DD5F /* Images.xcassets */,
 				3A17F4A41A90C90C0091DD5F /* LaunchScreen.xib */,
+				3A17F49F1A90C90C0091DD5F /* Main.storyboard */,
+				3A17F4BD1A90E7580091DD5F /* MainViewController.h */,
+				3A17F4BB1A90E7450091DD5F /* MainViewController.m */,
 				3A17F4991A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodeld */,
+				3A17F49C1A90C90C0091DD5F /* SensorConnectionViewController.h */,
+				3A17F49D1A90C90C0091DD5F /* SensorConnectionViewController.m */,
 				3A17F4921A90C90C0091DD5F /* Supporting Files */,
 			);
 			path = MobileHealthMonitoring;
@@ -224,7 +229,8 @@
 			files = (
 				3A17F4981A90C90C0091DD5F /* AppDelegate.m in Sources */,
 				3A17F49B1A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodeld in Sources */,
-				3A17F49E1A90C90C0091DD5F /* ViewController.m in Sources */,
+				3A17F49E1A90C90C0091DD5F /* SensorConnectionViewController.m in Sources */,
+				3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */,
 				3A17F4951A90C90C0091DD5F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
