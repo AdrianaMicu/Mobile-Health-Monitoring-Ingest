@@ -7,6 +7,7 @@
 //
 
 #import "SensorConnectionViewController.h"
+#import "MQTTMessenger.h"
 
 @interface SensorConnectionViewController ()
 
@@ -170,7 +171,7 @@
         //send in HealthApp
         
         //send to Backend
-        [self sendSensorDataToDB];
+        [self sendSensorDataToDB: (double) self.heartRate];
     }
     return;
 }
@@ -208,7 +209,13 @@
     return [NSString stringWithFormat: @"MQTTTest.%d", arc4random_uniform(10000)];
 }
 
-- (void) sendSensorDataToDB
+- (void) sendSensorDataToDB: (double) data
+{
+    [self connectToMQTTHost];
+    [self publishSensorData: data];
+}
+
+- (void) connectToMQTTHost
 {
     NSArray *servers = [SensorConnectionViewController parseCommaList:@"xyzkfq.messaging.internetofthings.ibmcloud.com"];
     NSArray *ports = [SensorConnectionViewController parseCommaList:@"1883"];
@@ -216,9 +223,21 @@
     NSString *clientID = @"d:xyzkfq:iOSDeviceMT:a88e24348a82";
     if (clientID == NULL) {
         clientID = [SensorConnectionViewController uniqueId];
-        //[[Messenger sharedMessenger] setClientID:clientID];
+        [[MQTTMessenger sharedMessenger] setClientID:clientID];
     }
-    //[[Messenger sharedMessenger] connectWithHosts:servers ports:ports clientId:clientID cleanSession:self.cleanSession.isOn];
+    [[MQTTMessenger sharedMessenger] connectWithHosts:servers ports:ports clientId:clientID cleanSession:TRUE];
+}
+
+- (void) publishSensorData: (double) data
+{
+    NSString *topic = @"iot-2/evt/status/fmt/json";
+    
+    NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
+    NSLog(@"Time Stamp Value == %@", timeStampValue);
+    
+    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%d\", \"timestamp\":\"%@\"}}", (int)self.heartRate, timeStampValue];
+    
+    [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
 }
 
 @end

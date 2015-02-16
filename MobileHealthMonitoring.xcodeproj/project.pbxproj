@@ -17,6 +17,8 @@
 		3A17F4B21A90C90C0091DD5F /* MobileHealthMonitoringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */; };
 		3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4BB1A90E7450091DD5F /* MainViewController.m */; };
 		3AD2BE6D1A920B6600943541 /* MQTTMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AD2BE6C1A920B6600943541 /* MQTTMessenger.m */; };
+		3AD2BE781A92217800943541 /* libiosMQTT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD2BE771A92217800943541 /* libiosMQTT.a */; };
+		3AD2BE7B1A92219400943541 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD2BE7A1A92219400943541 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,10 @@
 		3A17F4BD1A90E7580091DD5F /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		3AD2BE6B1A920B4000943541 /* MQTTMessenger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTMessenger.h; sourceTree = "<group>"; };
 		3AD2BE6C1A920B6600943541 /* MQTTMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTMessenger.m; sourceTree = "<group>"; };
+		3AD2BE701A920CA400943541 /* MqttOCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MqttOCClient.h; path = MQTTLib/MqttOCClient.h; sourceTree = "<group>"; };
+		3AD2BE771A92217800943541 /* libiosMQTT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiosMQTT.a; path = Frameworks/libiosMQTT.a; sourceTree = "<group>"; };
+		3AD2BE791A92219400943541 /* MobileHealthMonitoring.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MobileHealthMonitoring.entitlements; sourceTree = "<group>"; };
+		3AD2BE7A1A92219400943541 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AD2BE781A92217800943541 /* libiosMQTT.a in Frameworks */,
+				3AD2BE7B1A92219400943541 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +79,7 @@
 		3A17F4861A90C90C0091DD5F = {
 			isa = PBXGroup;
 			children = (
+				3AD2BE761A92216D00943541 /* Frameworks */,
 				3A17F4911A90C90C0091DD5F /* MobileHealthMonitoring */,
 				3A17F4AE1A90C90C0091DD5F /* MobileHealthMonitoringTests */,
 				3A17F4901A90C90C0091DD5F /* Products */,
@@ -89,6 +98,8 @@
 		3A17F4911A90C90C0091DD5F /* MobileHealthMonitoring */ = {
 			isa = PBXGroup;
 			children = (
+				3AD2BE791A92219400943541 /* MobileHealthMonitoring.entitlements */,
+				3AD2BE6E1A920C1600943541 /* MQTTLib */,
 				3A17F4961A90C90C0091DD5F /* AppDelegate.h */,
 				3A17F4971A90C90C0091DD5F /* AppDelegate.m */,
 				3A17F4A21A90C90C0091DD5F /* Images.xcassets */,
@@ -130,6 +141,23 @@
 				3A17F4B01A90C90C0091DD5F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3AD2BE6E1A920C1600943541 /* MQTTLib */ = {
+			isa = PBXGroup;
+			children = (
+				3AD2BE701A920CA400943541 /* MqttOCClient.h */,
+			);
+			name = MQTTLib;
+			sourceTree = "<group>";
+		};
+		3AD2BE761A92216D00943541 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3AD2BE7A1A92219400943541 /* HealthKit.framework */,
+				3AD2BE771A92217800943541 /* libiosMQTT.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,6 +209,12 @@
 				TargetAttributes = {
 					3A17F48E1A90C90C0091DD5F = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = XP323L9VWR;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					3A17F4AA1A90C90C0091DD5F = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -359,9 +393,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MobileHealthMonitoring/MobileHealthMonitoring.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Adriana Micu (2K4Q6EX8XA)";
 				INFOPLIST_FILE = MobileHealthMonitoring/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MobileHealthMonitoring/Frameworks",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "150de38d-7970-4d41-83be-204f7b04968c";
 			};
 			name = Debug;
 		};
@@ -369,9 +411,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MobileHealthMonitoring/MobileHealthMonitoring.entitlements;
 				INFOPLIST_FILE = MobileHealthMonitoring/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MobileHealthMonitoring/Frameworks",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "150de38d-7970-4d41-83be-204f7b04968c";
 			};
 			name = Release;
 		};
