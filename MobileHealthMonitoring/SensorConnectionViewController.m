@@ -163,9 +163,14 @@
     else {
         bpm = CFSwapInt16LittleToHost(*(uint16_t *)(&reportData[1]));  // 3
     }
-    // Display the heart rate value to the UI if no error occurred
+
     if( (characteristic.value) || !error ) {
         self.heartRate = bpm;
+        
+        //send in HealthApp
+        
+        //send to Backend
+        [self sendSensorDataToDB];
     }
     return;
 }
@@ -191,6 +196,29 @@
         self.bodyData = [NSString stringWithFormat:@"Body Location: N/A"];
     }
     return;
+}
+
+# pragma mark Backend methods
+
++ (NSArray*) parseCommaList:(NSString*)field {
+    return [field componentsSeparatedByString:@","];
+}
+
++ (NSString*) uniqueId {
+    return [NSString stringWithFormat: @"MQTTTest.%d", arc4random_uniform(10000)];
+}
+
+- (void) sendSensorDataToDB
+{
+    NSArray *servers = [SensorConnectionViewController parseCommaList:@"xyzkfq.messaging.internetofthings.ibmcloud.com"];
+    NSArray *ports = [SensorConnectionViewController parseCommaList:@"1883"];
+    
+    NSString *clientID = @"d:xyzkfq:iOSDeviceMT:a88e24348a82";
+    if (clientID == NULL) {
+        clientID = [SensorConnectionViewController uniqueId];
+        //[[Messenger sharedMessenger] setClientID:clientID];
+    }
+    //[[Messenger sharedMessenger] connectWithHosts:servers ports:ports clientId:clientID cleanSession:self.cleanSession.isOn];
 }
 
 @end

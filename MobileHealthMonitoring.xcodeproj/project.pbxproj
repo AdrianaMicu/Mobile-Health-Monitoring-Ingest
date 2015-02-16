@@ -16,6 +16,7 @@
 		3A17F4A61A90C90C0091DD5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A17F4A41A90C90C0091DD5F /* LaunchScreen.xib */; };
 		3A17F4B21A90C90C0091DD5F /* MobileHealthMonitoringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */; };
 		3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4BB1A90E7450091DD5F /* MainViewController.m */; };
+		3AD2BE6D1A920B6600943541 /* MQTTMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AD2BE6C1A920B6600943541 /* MQTTMessenger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileHealthMonitoringTests.m; sourceTree = "<group>"; };
 		3A17F4BB1A90E7450091DD5F /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3A17F4BD1A90E7580091DD5F /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		3AD2BE6B1A920B4000943541 /* MQTTMessenger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTMessenger.h; sourceTree = "<group>"; };
+		3AD2BE6C1A920B6600943541 /* MQTTMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTMessenger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +97,8 @@
 				3A17F4BD1A90E7580091DD5F /* MainViewController.h */,
 				3A17F4BB1A90E7450091DD5F /* MainViewController.m */,
 				3A17F4991A90C90C0091DD5F /* MobileHealthMonitoring.xcdatamodeld */,
+				3AD2BE6B1A920B4000943541 /* MQTTMessenger.h */,
+				3AD2BE6C1A920B6600943541 /* MQTTMessenger.m */,
 				3A17F49C1A90C90C0091DD5F /* SensorConnectionViewController.h */,
 				3A17F49D1A90C90C0091DD5F /* SensorConnectionViewController.m */,
 				3A17F4921A90C90C0091DD5F /* Supporting Files */,
@@ -232,6 +237,7 @@
 				3A17F49E1A90C90C0091DD5F /* SensorConnectionViewController.m in Sources */,
 				3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */,
 				3A17F4951A90C90C0091DD5F /* main.m in Sources */,
+				3AD2BE6D1A920B6600943541 /* MQTTMessenger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +428,7 @@
 				3A17F4B71A90C90C0091DD5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3A17F4B81A90C90C0091DD5F /* Build configuration list for PBXNativeTarget "MobileHealthMonitoringTests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +437,7 @@
 				3A17F4BA1A90C90C0091DD5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
