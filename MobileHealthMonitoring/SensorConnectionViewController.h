@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+@import HealthKit;
 
 #define DEVICE_INFO_SERVICE_UUID @"180A"                // service
 #define HEART_RATE_SERVICE_UUID @"180D"                 // service
@@ -17,6 +18,8 @@
 #define DEVICE_MANUFACTURER_NAME_UUID @"2A29"           // characteristic from 180A
 
 @interface SensorConnectionViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate>
+
+@property (nonatomic) HKHealthStore *healthStore;
 
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *peripheral;

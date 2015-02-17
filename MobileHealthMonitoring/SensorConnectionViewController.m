@@ -25,19 +25,6 @@ BOOL isConnectedToMQTTHost = FALSE;
 
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
-    
-    //[self requestAccessToHealthApp];
-    
-//    int lowerBound = 60;
-//    int upperBound = 130;
-//    int rndValue = 0;
-//    for (int i = 0; i < 50000; i++) {
-//        NSLog(@"start");
-//        rndValue = lowerBound + arc4random() % (upperBound - lowerBound);
-//        [self writeHeartRateToHealthApp:rndValue];
-//    }
-//    NSLog(@"done");
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -186,16 +173,14 @@ BOOL isConnectedToMQTTHost = FALSE;
     if( (characteristic.value) || !error ) {
         self.heartRate = bpm;
         
-        //send in HealthApp
-        if(NSClassFromString(@"HKHealthStore") && [HKHealthStore isHealthDataAvailable])
-        {
-            [self requestAccessToHealthApp];
-        }
+        // send to local SQLite DB
+        [self sendSensorDataToSQLite];
         
-        [self writeHeartRateToHealthApp: (double) self.heartRate];
+        //send in HealthApp
+        //[self writeHeartRateToHealthApp: (double) self.heartRate];
 
         //send to Backend
-        [self sendSensorDataToDB: (double) self.heartRate];
+        //[self sendSensorDataToDB: (double) self.heartRate];
     }
     return;
 }
@@ -269,48 +254,12 @@ BOOL isConnectedToMQTTHost = FALSE;
 
 # pragma mark Health Kit methods
 
-- (void) requestAccessToHealthApp
-{
-    healthStore = [[HKHealthStore alloc] init];
-    
-    // Share heart rate
-    NSSet *shareObjectTypes = [NSSet setWithObjects:
-                               [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate],
-                               nil];
-    
-    // Read step count
-    NSSet *readObjectTypes = [NSSet setWithObjects: [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount], nil];
-    
-    // Request access
-    [healthStore requestAuthorizationToShareTypes:shareObjectTypes
-                                        readTypes:readObjectTypes
-                                       completion:^(BOOL success, NSError *error) {
-                                           
-                                           if(success == YES)
-                                           {
-                                               // ...
-                                           }
-                                           else
-                                           {
-                                               // Determine if it was an error or if the
-                                               // user just canceld the authorization request
-                                           }
-                                           
-                                       }];
-}
-
-//int i = 1000;
 - (void) writeHeartRateToHealthApp: (double) heartRate
 {
-    // Create an instance of HKQuantityType and
-    // HKQuantity to specify the data type and value
-    // you want to update
-    NSDate          *now = [NSDate date];
-//    NSDate *newDate = [now dateByAddingTimeInterval:-(3600+i)*4];
-//    i += 100;
-    HKQuantityType  *hkQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
-    HKUnit *heartRateUnit = [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
-    HKQuantity      *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
+    NSDate         *now = [NSDate date];
+    HKQuantityType *hkQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
+    HKUnit         *heartRateUnit = [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
+    HKQuantity     *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
     
     // Create the concrete sample
     HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType
@@ -319,9 +268,16 @@ BOOL isConnectedToMQTTHost = FALSE;
                                                                       endDate:now];
     
     // Update the weight in the health store
-    [healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
+    [self.healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
         NSLog(@"");
     }];
+}
+
+# pragma mark SQLite methods
+
+- (void) sendSensorDataToSQLite
+{
+    
 }
 
 @end

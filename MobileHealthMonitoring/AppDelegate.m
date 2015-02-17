@@ -7,8 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import "SensorConnectionViewController.h"
+@import HealthKit;
 
 @interface AppDelegate ()
+
+@property (nonatomic, readwrite) HKHealthStore *healthStore;
 
 @end
 
@@ -16,7 +20,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    [self initializeHealthStore];
+        
     return YES;
 }
 
@@ -43,6 +49,60 @@
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
 }
+
+# pragma mark HealthKit methods
+
+- (void) initializeHealthStore
+{
+    if ([HKHealthStore isHealthDataAvailable]) {
+        self.healthStore = [[HKHealthStore alloc] init];
+        NSSet *writeDataTypes = [self dataTypesToWrite];
+        NSSet *readDataTypes = [self dataTypesToRead];
+        
+        // Request access
+        [self.healthStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
+            
+            if (!success) {
+                NSLog(@"You didn't allow HealthKit to access these read/write data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: %@. If you're using a simulator, try it on a device.", error);
+                return;
+            }
+            
+            // Handle success in your app here.
+            [self setupHealthStoreForViewControllers];
+            
+        }];
+    }
+}
+
+// Returns the types of data that Fit wishes to write to HealthKit.
+- (NSSet *)dataTypesToWrite {
+    // Share heart rate
+    HKQuantityType *heartRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
+    
+    NSSet *shareObjectTypes = [NSSet setWithObjects: heartRateType, nil];
+    
+    return shareObjectTypes;
+}
+
+// Returns the types of data that Fit wishes to read from HealthKit.
+- (NSSet *)dataTypesToRead {
+    // Read step count
+    HKQuantityType *stepCountType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    
+    NSSet *readObjectTypes = [NSSet setWithObjects: stepCountType, nil];
+    
+    return readObjectTypes;
+}
+
+- (void)setupHealthStoreForViewControllers {
+    UIViewController *viewController = (UIViewController *)[self.window rootViewController];
+    
+    if ([viewController isKindOfClass:[SensorConnectionViewController class]]) {
+        SensorConnectionViewController *sensorConnectionViewController = (id)viewController;
+        sensorConnectionViewController.healthStore = self.healthStore;
+    }
+}
+
 
 #pragma mark - Core Data stack
 
