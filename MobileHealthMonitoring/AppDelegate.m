@@ -18,10 +18,13 @@
 
 @implementation AppDelegate
 
+@synthesize sensorDataDAO;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self initializeHealthStore];
+    
+    [self initializeCoreDataComponents];
         
     return YES;
 }
@@ -103,6 +106,13 @@
     }
 }
 
+#pragma mark Core Data methods
+
+-(void) initializeCoreDataComponents
+{
+    SensorDataDAO *sensorDataDAOComp = [[SensorDataDAO alloc] init];
+    self.sensorDataDAO = sensorDataDAOComp;
+}
 
 #pragma mark - Core Data stack
 

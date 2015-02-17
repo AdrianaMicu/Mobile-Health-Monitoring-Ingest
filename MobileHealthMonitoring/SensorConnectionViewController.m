@@ -8,11 +8,13 @@
 
 #import "SensorConnectionViewController.h"
 #import "MQTTMessenger.h"
+#import "AppDelegate.h"
 
 @import HealthKit;
 
 HKHealthStore *healthStore;
 BOOL isConnectedToMQTTHost = FALSE;
+int indexOfSensorData;
 
 @interface SensorConnectionViewController ()
 
@@ -25,6 +27,8 @@ BOOL isConnectedToMQTTHost = FALSE;
 
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
+    
+    [self sendPersistedSensorDataToBackend];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -174,7 +178,7 @@ BOOL isConnectedToMQTTHost = FALSE;
         self.heartRate = bpm;
         
         // send to local SQLite DB
-        [self sendSensorDataToSQLite];
+        [self sendSensorDataToSQLite: self.heartRate];
         
         //send in HealthApp
         //[self writeHeartRateToHealthApp: (double) self.heartRate];
@@ -218,12 +222,49 @@ BOOL isConnectedToMQTTHost = FALSE;
     return [NSString stringWithFormat: @"MQTTTest.%d", arc4random_uniform(10000)];
 }
 
-- (void) sendSensorDataToDB: (double) data
+- (void) sendPersistedSensorDataToBackend
 {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        do {
+            self.allSensorData = [self getAllSensorData];
+        } while ([self.allSensorData count] < 20);
+        
+        // send to Cloud
+        [self sendBatchSensorDataToDB];
+    });
+}
+
+- (NSMutableArray *) getAllSensorData
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate.sensorDataDAO getAllSensorData];
+}
+
+- (void) sendBatchSensorDataToDB
+{
+    indexOfSensorData = 0;
+    
+    //start litening if publish was made successfully
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedPublishSuccess) name:@"notifyPublishSuccess" object:nil];
+    
     if (!isConnectedToMQTTHost) {
         [self connectToMQTTHost];
     }
-    [self publishSensorData: data];
+    for (int i = 0; i < 5; i++)
+        [self notifiedPublishSuccess];
+}
+
+- (void) notifiedPublishSuccess
+{
+    if (indexOfSensorData < [self.allSensorData count]) {
+        [self publishSensorData: [self getNextSensorData:indexOfSensorData]];
+    }
+}
+
+- (double) getNextSensorData: (int) indexOfSensorData
+{
+    SensorData *sensorData = [self.allSensorData objectAtIndex:indexOfSensorData];
+    return [sensorData.data doubleValue];
 }
 
 - (void) connectToMQTTHost
@@ -275,9 +316,16 @@ BOOL isConnectedToMQTTHost = FALSE;
 
 # pragma mark SQLite methods
 
-- (void) sendSensorDataToSQLite
+- (void) sendSensorDataToSQLite: (double) data
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    SensorData *sensorData = [appDelegate.sensorDataDAO insertNewSensorData];
+    sensorData.sensor = self.manufacturer;
+    sensorData.data = [NSNumber numberWithDouble:data];
+    sensorData.receivedTime = [NSDate date];
+    
+    [appDelegate.sensorDataDAO saveNSManagedObjectContext];
 }
 
 @end

@@ -22,6 +22,7 @@
 		3AD2BE8C1A932A7300943541 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AD2BE891A932A7300943541 /* main.m */; };
 		3AD2BE8D1A932A7300943541 /* MobileHealthMonitoring.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3AD2BE8A1A932A7300943541 /* MobileHealthMonitoring.entitlements */; };
 		3AD2BE8F1A932BC300943541 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AD2BE8E1A932BC300943541 /* Images.xcassets */; };
+		3AD2BE961A93776000943541 /* SensorDataDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AD2BE951A93776000943541 /* SensorDataDAO.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		3AD2BE891A932A7300943541 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SupportingFiles/main.m; sourceTree = "<group>"; };
 		3AD2BE8A1A932A7300943541 /* MobileHealthMonitoring.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MobileHealthMonitoring.entitlements; path = SupportingFiles/MobileHealthMonitoring.entitlements; sourceTree = "<group>"; };
 		3AD2BE8E1A932BC300943541 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SupportingFiles/Images.xcassets; sourceTree = "<group>"; };
+		3AD2BE941A93775200943541 /* SensorDataDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SensorDataDAO.h; path = SQLite/DAO/SensorDataDAO.h; sourceTree = "<group>"; };
+		3AD2BE951A93776000943541 /* SensorDataDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorDataDAO.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,9 +178,9 @@
 		3AD2BE7D1A93291A00943541 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
+				3AD2BE931A93772E00943541 /* DAO */,
+				3AD2BE921A93771D00943541 /* Entity */,
 				3AD2BE821A932A2800943541 /* MobileHealthMonitoring.xcdatamodeld */,
-				3AD2BE7F1A9329B800943541 /* SensorData.m */,
-				3AD2BE811A9329CC00943541 /* SensorData.h */,
 			);
 			name = SQLite;
 			sourceTree = "<group>";
@@ -189,6 +192,24 @@
 				3A17F49F1A90C90C0091DD5F /* Main.storyboard */,
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		3AD2BE921A93771D00943541 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				3AD2BE7F1A9329B800943541 /* SensorData.m */,
+				3AD2BE811A9329CC00943541 /* SensorData.h */,
+			);
+			name = Entity;
+			sourceTree = "<group>";
+		};
+		3AD2BE931A93772E00943541 /* DAO */ = {
+			isa = PBXGroup;
+			children = (
+				3AD2BE941A93775200943541 /* SensorDataDAO.h */,
+				3AD2BE951A93776000943541 /* SensorDataDAO.m */,
+			);
+			name = DAO;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +322,7 @@
 			files = (
 				3AD2BE801A9329B800943541 /* SensorData.m in Sources */,
 				3A17F4981A90C90C0091DD5F /* AppDelegate.m in Sources */,
+				3AD2BE961A93776000943541 /* SensorDataDAO.m in Sources */,
 				3AD2BE871A932A4800943541 /* MQTTMessenger.m in Sources */,
 				3AD2BE841A932A2800943541 /* MobileHealthMonitoring.xcdatamodeld in Sources */,
 				3A17F49E1A90C90C0091DD5F /* SensorConnectionViewController.m in Sources */,

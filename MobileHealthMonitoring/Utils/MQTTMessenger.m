@@ -34,6 +34,7 @@
 - (void) onSuccess:(NSObject*) invocationContext
 {
     NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
+    //[[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject*) invocationContext errorCode:(int) errorCode errorMessage:(NSString*) errorMessage
 {
@@ -68,6 +69,7 @@
 - (void) onSuccess:(NSObject *) invocationContext
 {
     NSLog(@"PublishCallbacks - onSuccess");
+    //[[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject *) invocationContext errorCode:(int) errorCode errorMessage:(NSString *)errorMessage
 {
@@ -89,7 +91,6 @@
     NSLog(@"GeneralCallbacks - onMessageDelivered!");
 }
 @end
-
 
 @implementation MQTTMessenger
 
@@ -142,6 +143,12 @@
     
     MqttMessage *msg = [[MqttMessage alloc] initWithMqttMessage:topic payload:(char*)[payload UTF8String] length:(int)payload.length qos:qos retained:retained duplicate:NO];
     [client send:msg invocationContext:self onCompletion:[[PublishCallbacks alloc] init]];
+}
+
+# pragma mark Notification methonds
+
+- (void)notifyPublishSuccess {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifyPublishSuccess" object:nil];
 }
 
 @end

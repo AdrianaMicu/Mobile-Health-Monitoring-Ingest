@@ -18,9 +18,17 @@
 #define DEVICE_MANUFACTURER_NAME_UUID @"2A29"           // characteristic from 180A
 
 @interface SensorConnectionViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate>
+{
 
+}
+
+// HealthKit
 @property (nonatomic) HKHealthStore *healthStore;
 
+// CoreData
+@property (nonatomic, strong) NSMutableArray* allSensorData;
+
+// Bluetooth
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 
