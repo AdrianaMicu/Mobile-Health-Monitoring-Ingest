@@ -9,6 +9,11 @@
 #import "SensorConnectionViewController.h"
 #import "MQTTMessenger.h"
 
+@import HealthKit;
+
+HKHealthStore *healthStore;
+BOOL isConnectedToMQTTHost = FALSE;
+
 @interface SensorConnectionViewController ()
 
 @end
@@ -20,6 +25,19 @@
 
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
+    
+    //[self requestAccessToHealthApp];
+    
+//    int lowerBound = 60;
+//    int upperBound = 130;
+//    int rndValue = 0;
+//    for (int i = 0; i < 50000; i++) {
+//        NSLog(@"start");
+//        rndValue = lowerBound + arc4random() % (upperBound - lowerBound);
+//        [self writeHeartRateToHealthApp:rndValue];
+//    }
+//    NSLog(@"done");
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -169,7 +187,13 @@
         self.heartRate = bpm;
         
         //send in HealthApp
+        if(NSClassFromString(@"HKHealthStore") && [HKHealthStore isHealthDataAvailable])
+        {
+            [self requestAccessToHealthApp];
+        }
         
+        [self writeHeartRateToHealthApp: (double) self.heartRate];
+
         //send to Backend
         [self sendSensorDataToDB: (double) self.heartRate];
     }
@@ -211,7 +235,9 @@
 
 - (void) sendSensorDataToDB: (double) data
 {
-    [self connectToMQTTHost];
+    if (!isConnectedToMQTTHost) {
+        [self connectToMQTTHost];
+    }
     [self publishSensorData: data];
 }
 
@@ -226,6 +252,7 @@
         [[MQTTMessenger sharedMessenger] setClientID:clientID];
     }
     [[MQTTMessenger sharedMessenger] connectWithHosts:servers ports:ports clientId:clientID cleanSession:TRUE];
+    isConnectedToMQTTHost = TRUE;
 }
 
 - (void) publishSensorData: (double) data
@@ -238,6 +265,63 @@
     NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%d\", \"timestamp\":\"%@\"}}", (int)self.heartRate, timeStampValue];
     
     [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
+}
+
+# pragma mark Health Kit methods
+
+- (void) requestAccessToHealthApp
+{
+    healthStore = [[HKHealthStore alloc] init];
+    
+    // Share heart rate
+    NSSet *shareObjectTypes = [NSSet setWithObjects:
+                               [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate],
+                               nil];
+    
+    // Read step count
+    NSSet *readObjectTypes = [NSSet setWithObjects: [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount], nil];
+    
+    // Request access
+    [healthStore requestAuthorizationToShareTypes:shareObjectTypes
+                                        readTypes:readObjectTypes
+                                       completion:^(BOOL success, NSError *error) {
+                                           
+                                           if(success == YES)
+                                           {
+                                               // ...
+                                           }
+                                           else
+                                           {
+                                               // Determine if it was an error or if the
+                                               // user just canceld the authorization request
+                                           }
+                                           
+                                       }];
+}
+
+//int i = 1000;
+- (void) writeHeartRateToHealthApp: (double) heartRate
+{
+    // Create an instance of HKQuantityType and
+    // HKQuantity to specify the data type and value
+    // you want to update
+    NSDate          *now = [NSDate date];
+//    NSDate *newDate = [now dateByAddingTimeInterval:-(3600+i)*4];
+//    i += 100;
+    HKQuantityType  *hkQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
+    HKUnit *heartRateUnit = [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
+    HKQuantity      *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
+    
+    // Create the concrete sample
+    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType
+                                                                     quantity:hkQuantity
+                                                                    startDate:now
+                                                                      endDate:now];
+    
+    // Update the weight in the health store
+    [healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
+        NSLog(@"");
+    }];
 }
 
 @end
