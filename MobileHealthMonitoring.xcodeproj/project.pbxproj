@@ -62,6 +62,7 @@
 		3AD2BE8E1A932BC300943541 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SupportingFiles/Images.xcassets; sourceTree = "<group>"; };
 		3AD2BE941A93775200943541 /* SensorDataDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SensorDataDAO.h; path = SQLite/DAO/SensorDataDAO.h; sourceTree = "<group>"; };
 		3AD2BE951A93776000943541 /* SensorDataDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorDataDAO.m; sourceTree = "<group>"; };
+		3AD2BE991A93E11500943541 /* MQTTMessengerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MQTTMessengerDelegate.h; path = Utils/MQTTMessengerDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +172,7 @@
 			children = (
 				3AD2BE851A932A4800943541 /* MQTTMessenger.h */,
 				3AD2BE861A932A4800943541 /* MQTTMessenger.m */,
+				3AD2BE991A93E11500943541 /* MQTTMessengerDelegate.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";

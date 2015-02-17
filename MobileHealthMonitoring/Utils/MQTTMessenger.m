@@ -95,6 +95,7 @@
 @implementation MQTTMessenger
 
 @synthesize client;
+@synthesize delegate;
 
 #pragma mark Singleton Methods
 
@@ -149,6 +150,7 @@
 
 - (void)notifyPublishSuccess {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"notifyPublishSuccess" object:nil];
+    [delegate startSendingData];
 }
 
 @end

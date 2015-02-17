@@ -7,14 +7,12 @@
 //
 
 #import "SensorConnectionViewController.h"
-#import "MQTTMessenger.h"
 #import "AppDelegate.h"
 
 @import HealthKit;
 
-HKHealthStore *healthStore;
-BOOL isConnectedToMQTTHost = FALSE;
 int indexOfSensorData;
+BOOL isConnectedToMQTTHost = FALSE;
 
 @interface SensorConnectionViewController ()
 
@@ -22,9 +20,11 @@ int indexOfSensorData;
 
 @implementation SensorConnectionViewController
 
+@synthesize mqttMessenger;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
     
@@ -173,7 +173,7 @@ int indexOfSensorData;
     else {
         bpm = CFSwapInt16LittleToHost(*(uint16_t *)(&reportData[1]));  // 3
     }
-
+    
     if( (characteristic.value) || !error ) {
         self.heartRate = bpm;
         
@@ -182,7 +182,7 @@ int indexOfSensorData;
         
         //send in HealthApp
         //[self writeHeartRateToHealthApp: (double) self.heartRate];
-
+        
         //send to Backend
         //[self sendSensorDataToDB: (double) self.heartRate];
     }
@@ -228,7 +228,7 @@ int indexOfSensorData;
         do {
             self.allSensorData = [self getAllSensorData];
         } while ([self.allSensorData count] < 20);
-        
+    
         // send to Cloud
         [self sendBatchSensorDataToDB];
     //});
@@ -244,15 +244,12 @@ int indexOfSensorData;
 {
     indexOfSensorData = 0;
     
-    //start litening if publish was made successfully
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedPublishSuccess) name:@"notifyPublishSuccess" object:nil];
-    
     if (!isConnectedToMQTTHost) {
         [self connectToMQTTHost];
     }
 }
 
-- (void) notifiedPublishSuccess
+- (void) startSendingData
 {
     if (indexOfSensorData < [self.allSensorData count]) {
         [self publishSensorData: [self getNextSensorData:indexOfSensorData]];
@@ -267,15 +264,19 @@ int indexOfSensorData;
 
 - (void) connectToMQTTHost
 {
+    mqttMessenger = [MQTTMessenger sharedMessenger];
+    
     NSArray *servers = [SensorConnectionViewController parseCommaList:@"xyzkfq.messaging.internetofthings.ibmcloud.com"];
     NSArray *ports = [SensorConnectionViewController parseCommaList:@"1883"];
     
     NSString *clientID = @"d:xyzkfq:iOSDeviceMT:a88e24348a82";
     if (clientID == NULL) {
         clientID = [SensorConnectionViewController uniqueId];
-        [[MQTTMessenger sharedMessenger] setClientID:clientID];
+        [mqttMessenger setClientID:clientID];
     }
-    [[MQTTMessenger sharedMessenger] connectWithHosts:servers ports:ports clientId:clientID cleanSession:TRUE];
+    
+    [mqttMessenger setDelegate:self];
+    [mqttMessenger connectWithHosts:servers ports:ports clientId:clientID cleanSession:TRUE];
     isConnectedToMQTTHost = TRUE;
 }
 

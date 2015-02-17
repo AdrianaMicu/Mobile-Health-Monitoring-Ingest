@@ -8,13 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "MqttOCClient.h"
+#import "MQTTMessengerDelegate.h"
 
 @interface MQTTMessenger : NSObject {
     MqttClient *client;
+    
+    id<MQTTMessengerDelegate> __weak delegate;
 }
 
 @property (nonatomic, retain) MqttClient *client;
 @property (nonatomic, retain) NSString *clientID;
+@property (nonatomic, weak) id<MQTTMessengerDelegate> delegate;
 
 + (id)sharedMessenger;
 - (void)connectWithHosts:(NSArray *)hosts ports:(NSArray *)ports clientId:(NSString *)clientId cleanSession:(BOOL)cleanSession;

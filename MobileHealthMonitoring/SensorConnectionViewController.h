@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "MQTTMessengerDelegate.h"
+#import "MQTTMessenger.h"
 @import HealthKit;
 
 #define DEVICE_INFO_SERVICE_UUID @"180A"                // service
@@ -17,10 +19,13 @@
 #define HEART_RATE_DEVICE_BODY_LOCATION_UUID @"2A38"    // characteristic from 180D
 #define DEVICE_MANUFACTURER_NAME_UUID @"2A29"           // characteristic from 180A
 
-@interface SensorConnectionViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface SensorConnectionViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate, MQTTMessengerDelegate>
 {
-
+    MQTTMessenger* mqttMessenger;
 }
+
+// Backend
+@property (nonatomic, strong) MQTTMessenger* mqttMessenger;
 
 // HealthKit
 @property (nonatomic) HKHealthStore *healthStore;
