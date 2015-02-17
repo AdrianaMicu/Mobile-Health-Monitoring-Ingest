@@ -224,14 +224,14 @@ int indexOfSensorData;
 
 - (void) sendPersistedSensorDataToBackend
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         do {
             self.allSensorData = [self getAllSensorData];
         } while ([self.allSensorData count] < 20);
         
         // send to Cloud
         [self sendBatchSensorDataToDB];
-    });
+    //});
 }
 
 - (NSMutableArray *) getAllSensorData
@@ -245,13 +245,11 @@ int indexOfSensorData;
     indexOfSensorData = 0;
     
     //start litening if publish was made successfully
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedPublishSuccess) name:@"notifyPublishSuccess" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedPublishSuccess) name:@"notifyPublishSuccess" object:nil];
     
     if (!isConnectedToMQTTHost) {
         [self connectToMQTTHost];
     }
-    for (int i = 0; i < 5; i++)
-        [self notifiedPublishSuccess];
 }
 
 - (void) notifiedPublishSuccess
@@ -303,10 +301,7 @@ int indexOfSensorData;
     HKQuantity     *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
     
     // Create the concrete sample
-    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType
-                                                                     quantity:hkQuantity
-                                                                    startDate:now
-                                                                      endDate:now];
+    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity startDate:now endDate:now];
     
     // Update the weight in the health store
     [self.healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {

@@ -34,7 +34,7 @@
 - (void) onSuccess:(NSObject*) invocationContext
 {
     NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
-    //[[MQTTMessenger sharedMessenger] notifyPublishSuccess];
+    [[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject*) invocationContext errorCode:(int) errorCode errorMessage:(NSString*) errorMessage
 {
@@ -69,7 +69,7 @@
 - (void) onSuccess:(NSObject *) invocationContext
 {
     NSLog(@"PublishCallbacks - onSuccess");
-    //[[MQTTMessenger sharedMessenger] notifyPublishSuccess];
+    [[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject *) invocationContext errorCode:(int) errorCode errorMessage:(NSString *)errorMessage
 {
