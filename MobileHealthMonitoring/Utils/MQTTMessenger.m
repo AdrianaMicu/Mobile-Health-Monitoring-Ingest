@@ -33,13 +33,12 @@
 @implementation ConnectCallbacks
 - (void) onSuccess:(NSObject*) invocationContext
 {
-    NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
+    //NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
     [[MQTTMessenger sharedMessenger] notifyConnectSuccess];
 }
 - (void) onFailure:(NSObject*) invocationContext errorCode:(int) errorCode errorMessage:(NSString*) errorMessage
 {
-    NSLog(@"%s:%d - invocationContext=%@  errorCode=%d  errorMessage=%@", __func__,
-          __LINE__, invocationContext, errorCode, errorMessage);
+//    NSLog(@"%s:%d - invocationContext=%@  errorCode=%d  errorMessage=%@", __func__, __LINE__, invocationContext, errorCode, errorMessage);
 }
 @end
 
@@ -51,12 +50,11 @@
 @implementation DisconnectCallbacks
 - (void) onSuccess:(NSObject*) invocationContext
 {
-    NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
+    //NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
 }
 - (void) onFailure:(NSObject*) invocationContext errorCode:(int) errorCode errorMessage:(NSString*) errorMessage
 {
-    NSLog(@"%s:%d - invocationContext=%@  errorCode=%d  errorMessage=%@", __func__,
-          __LINE__, invocationContext, errorCode, errorMessage);
+    //NSLog(@"%s:%d - invocationContext=%@  errorCode=%d  errorMessage=%@", __func__, __LINE__, invocationContext, errorCode, errorMessage);
 }
 @end
 
@@ -68,13 +66,13 @@
 @implementation PublishCallbacks
 - (void) onSuccess:(NSObject *) invocationContext
 {
-    NSLog(@"PublishCallbacks - onSuccess");
+    //NSLog(@"PublishCallbacks - onSuccess");
     [NSThread sleepForTimeInterval:0.005];
     [[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject *) invocationContext errorCode:(int) errorCode errorMessage:(NSString *)errorMessage
 {
-    NSLog(@"PublishCallbacks - onFailure");
+    //NSLog(@"PublishCallbacks - onFailure");
 }
 @end
 
@@ -85,11 +83,11 @@
 @implementation GeneralCallbacks
 - (void) onConnectionLost:(NSObject*)invocationContext errorMessage:(NSString*)errorMessage
 {
-    NSLog(@"GeneralCallbacks - onConnectionLost!");
+    //NSLog(@"GeneralCallbacks - onConnectionLost!");
 }
 - (void) onMessageDelivered:(NSObject*)invocationContext messageId:(int)msgId
 {
-    NSLog(@"GeneralCallbacks - onMessageDelivered!");
+    //NSLog(@"GeneralCallbacks - onMessageDelivered!");
 }
 @end
 
@@ -126,7 +124,7 @@
     opts.cleanSession = cleanSession;
     opts.userName = @"use-token-auth";
     opts.password = @"hwe9k+nhFd_XWN(*Rp";
-    NSLog(@"%s:%d host=%@, port=%@, clientId=%@", __func__, __LINE__, hosts, ports, clientId);
+    //NSLog(@"%s:%d host=%@, port=%@, clientId=%@", __func__, __LINE__, hosts, ports, clientId);
     [client connectWithOptions:opts invocationContext:self onCompletion:[[ConnectCallbacks alloc] init]];
 }
 
@@ -141,7 +139,7 @@
 {
     NSString *retainedStr = retained ? @" [retained]" : @"";
     NSString *logStr = [NSString stringWithFormat:@"[%@] %@%@", topic, payload, retainedStr];
-    NSLog(@"%s:%d - %@", __func__, __LINE__, logStr);
+    //NSLog(@"%s:%d - %@", __func__, __LINE__, logStr);
     
     MqttMessage *msg = [[MqttMessage alloc] initWithMqttMessage:topic payload:(char*)[payload UTF8String] length:(int)payload.length qos:qos retained:retained duplicate:NO];
     [client send:msg invocationContext:self onCompletion:[[PublishCallbacks alloc] init]];

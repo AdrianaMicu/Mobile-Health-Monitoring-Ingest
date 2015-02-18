@@ -177,14 +177,10 @@ int indexOfSensorData;
         self.heartRate = bpm;
         
         // send to local SQLite DB
-        NSLog(@"received");
         [self sendSensorDataToSQLite: self.heartRate];
         
         //send in HealthApp
-        //[self writeHeartRateToHealthApp: (double) self.heartRate];
-        
-        //send to Backend
-        //[self sendSensorDataToDB: (double) self.heartRate];
+        [self writeHeartRateToHealthApp: (double) self.heartRate];
     }
     return;
 }
@@ -222,14 +218,15 @@ int indexOfSensorData;
     return [NSString stringWithFormat: @"MQTTTest.%d", arc4random_uniform(10000)];
 }
 
+// notified by MQTT Connect Success Callback, and then called from startSendingData when it finishes
 - (void) sendPersistedSensorDataToBackend
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         do {
             self.allSensorData = [self getAllSensorData];
-        } while ([self.allSensorData count] < 300); // 1000
-    
-        int nr = [self.allSensorData count];
+        } while ([self.allSensorData count] < 50); // 1000
+        
+        //int nr = [self.allSensorData count];
         
         // send to Cloud
         indexOfSensorData = 0;
@@ -243,6 +240,7 @@ int indexOfSensorData;
     return [appDelegate.sensorDataDAO getAllSensorData];
 }
 
+// started from sendPersistedSensorDataToBackend, and then notified by MQTT Publish Success Callback
 - (void) startSendingData
 {
     if (indexOfSensorData < [self.allSensorData count]) {
@@ -252,6 +250,8 @@ int indexOfSensorData;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self publishSensorData: tempSensorData];
         });
+    } else {
+        [self sendPersistedSensorDataToBackend];
     }
 }
 
@@ -282,7 +282,6 @@ int indexOfSensorData;
     NSString *topic = @"iot-2/evt/status/fmt/json";
     
     NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[sensorData objectAtIndex:1] timeIntervalSince1970]];
-    //NSLog(@"Time Stamp Value == %@", timeStampValue);
     
     NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
     
@@ -299,11 +298,15 @@ int indexOfSensorData;
     HKQuantity     *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
     
     // Create the concrete sample
+//    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity startDate:[sensorData objectAtIndex:1] endDate:[sensorData objectAtIndex:1]];
+    
     HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity startDate:now endDate:now];
     
-    // Update the weight in the health store
+    // Update the heart rate in the health store
     [self.healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
-        NSLog(@"");
+        if (success) {
+            NSLog(@"sent to health");
+        }
     }];
 }
 
