@@ -451,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MobileHealthMonitoring/SupportingFiles/MobileHealthMonitoring.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Adriana Micu (2K4Q6EX8XA)";
 				INFOPLIST_FILE = MobileHealthMonitoring/SupportingFiles/Info.plist;
@@ -469,6 +470,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MobileHealthMonitoring/SupportingFiles/MobileHealthMonitoring.entitlements;
 				INFOPLIST_FILE = MobileHealthMonitoring/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

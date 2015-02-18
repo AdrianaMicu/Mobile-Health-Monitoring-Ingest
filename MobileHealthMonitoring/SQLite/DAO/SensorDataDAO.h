@@ -15,12 +15,13 @@
     NSManagedObjectContext * context;
 }
 
-@property (nonatomic, strong) NSManagedObjectContext * context;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 -(void) saveNSManagedObjectContext;
 
 -(SensorData *) insertNewSensorData;
 -(NSMutableArray *) getAllSensorData;
+- (void)deleteSensorData:(NSManagedObject *)target;
 
 @end
 

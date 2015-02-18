@@ -11,5 +11,6 @@
 @protocol MQTTMessengerDelegate <NSObject>
 
 - (void) startSendingData;
+- (void) sendPersistedSensorDataToBackend;
 
 @end

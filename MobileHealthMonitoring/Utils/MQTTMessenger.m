@@ -34,7 +34,7 @@
 - (void) onSuccess:(NSObject*) invocationContext
 {
     NSLog(@"%s:%d - invocationContext=%@", __func__, __LINE__, invocationContext);
-    [[MQTTMessenger sharedMessenger] notifyPublishSuccess];
+    [[MQTTMessenger sharedMessenger] notifyConnectSuccess];
 }
 - (void) onFailure:(NSObject*) invocationContext errorCode:(int) errorCode errorMessage:(NSString*) errorMessage
 {
@@ -69,6 +69,7 @@
 - (void) onSuccess:(NSObject *) invocationContext
 {
     NSLog(@"PublishCallbacks - onSuccess");
+    [NSThread sleepForTimeInterval:0.005];
     [[MQTTMessenger sharedMessenger] notifyPublishSuccess];
 }
 - (void) onFailure:(NSObject *) invocationContext errorCode:(int) errorCode errorMessage:(NSString *)errorMessage
@@ -148,8 +149,11 @@
 
 # pragma mark Notification methonds
 
+- (void)notifyConnectSuccess {
+    [delegate sendPersistedSensorDataToBackend];
+}
+
 - (void)notifyPublishSuccess {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifyPublishSuccess" object:nil];
     [delegate startSendingData];
 }
 

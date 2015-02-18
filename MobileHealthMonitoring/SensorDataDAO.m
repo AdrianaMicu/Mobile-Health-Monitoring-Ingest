@@ -81,4 +81,11 @@
     return mutableFetchResults;
 }
 
+- (void)deleteSensorData:(NSManagedObject *)target
+{
+    [context deleteObject:target];
+    
+    [self saveNSManagedObjectContext];
+}
+
 @end

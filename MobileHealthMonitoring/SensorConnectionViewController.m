@@ -11,9 +11,6 @@
 
 @import HealthKit;
 
-int indexOfSensorData;
-BOOL isConnectedToMQTTHost = FALSE;
-
 @interface SensorConnectionViewController ()
 
 @end
@@ -22,13 +19,15 @@ BOOL isConnectedToMQTTHost = FALSE;
 
 @synthesize mqttMessenger;
 
+int indexOfSensorData;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
     
-    [self sendPersistedSensorDataToBackend];
+    [self connectToMQTTHost];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -178,6 +177,7 @@ BOOL isConnectedToMQTTHost = FALSE;
         self.heartRate = bpm;
         
         // send to local SQLite DB
+        NSLog(@"received");
         [self sendSensorDataToSQLite: self.heartRate];
         
         //send in HealthApp
@@ -224,14 +224,17 @@ BOOL isConnectedToMQTTHost = FALSE;
 
 - (void) sendPersistedSensorDataToBackend
 {
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         do {
             self.allSensorData = [self getAllSensorData];
-        } while ([self.allSensorData count] < 20);
+        } while ([self.allSensorData count] < 300); // 1000
     
+        int nr = [self.allSensorData count];
+        
         // send to Cloud
-        [self sendBatchSensorDataToDB];
-    //});
+        indexOfSensorData = 0;
+        [self startSendingData];
+    });
 }
 
 - (NSMutableArray *) getAllSensorData
@@ -240,26 +243,21 @@ BOOL isConnectedToMQTTHost = FALSE;
     return [appDelegate.sensorDataDAO getAllSensorData];
 }
 
-- (void) sendBatchSensorDataToDB
-{
-    indexOfSensorData = 0;
-    
-    if (!isConnectedToMQTTHost) {
-        [self connectToMQTTHost];
-    }
-}
-
 - (void) startSendingData
 {
     if (indexOfSensorData < [self.allSensorData count]) {
-        [self publishSensorData: [self getNextSensorData:indexOfSensorData]];
+        SensorData* currentSensorData = [self getNextSensorData:indexOfSensorData++];
+        NSArray* tempSensorData = [NSArray arrayWithObjects:currentSensorData.data, currentSensorData.receivedTime, nil];
+        [self deleteSensorDataFromSQLite:currentSensorData];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self publishSensorData: tempSensorData];
+        });
     }
 }
 
-- (double) getNextSensorData: (int) indexOfSensorData
+- (SensorData *) getNextSensorData: (int) indexOfSensorData
 {
-    SensorData *sensorData = [self.allSensorData objectAtIndex:indexOfSensorData];
-    return [sensorData.data doubleValue];
+    return [self.allSensorData objectAtIndex:indexOfSensorData];
 }
 
 - (void) connectToMQTTHost
@@ -277,17 +275,16 @@ BOOL isConnectedToMQTTHost = FALSE;
     
     [mqttMessenger setDelegate:self];
     [mqttMessenger connectWithHosts:servers ports:ports clientId:clientID cleanSession:TRUE];
-    isConnectedToMQTTHost = TRUE;
 }
 
-- (void) publishSensorData: (double) data
+- (void) publishSensorData: (NSArray *) sensorData
 {
     NSString *topic = @"iot-2/evt/status/fmt/json";
     
-    NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
-    NSLog(@"Time Stamp Value == %@", timeStampValue);
+    NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[sensorData objectAtIndex:1] timeIntervalSince1970]];
+    //NSLog(@"Time Stamp Value == %@", timeStampValue);
     
-    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%d\", \"timestamp\":\"%@\"}}", (int)self.heartRate, timeStampValue];
+    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
     
     [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
 }
@@ -322,6 +319,13 @@ BOOL isConnectedToMQTTHost = FALSE;
     sensorData.receivedTime = [NSDate date];
     
     [appDelegate.sensorDataDAO saveNSManagedObjectContext];
+}
+
+- (void) deleteSensorDataFromSQLite: (SensorData *) sensorData
+{
+     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    [appDelegate.sensorDataDAO deleteSensorData: sensorData];
 }
 
 @end
