@@ -22,11 +22,10 @@
         AppDelegate * appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         NSManagedObjectContext * delegateContext = [appDelegate managedObjectContext];
         
-        // Get persistent obejct context
         context = delegateContext;
         if (!context)
         {
-            // NSLog(@" BarcodesComponent - init: context is nil");
+            
         }
     }
     
@@ -46,12 +45,11 @@
     
     if (![context save:&error])
     {
-        // NSLog(@" BarcodesComponent - save: error on save");
+        
     }
     else
     {
-        // NSLog(@"saved");
-        // Save OK message
+        NSLog(@"saved");
     }
 }
 

@@ -146,8 +146,12 @@ int indexOfSensorData;
         [self getHeartBPMData:characteristic error:error];
     }
     
+    // Retrieve the characteristic value for serial number received
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:DEVICE_SERIAL_NUMBER_UUID]]) {
+        [self getSerialNumber:characteristic];
+    }
     // Retrieve the characteristic value for manufacturer name received
-    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:DEVICE_MANUFACTURER_NAME_UUID]]) {  // 2
+    else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:DEVICE_MANUFACTURER_NAME_UUID]]) {  // 2
         [self getManufacturerName:characteristic];
     }
     
@@ -182,6 +186,14 @@ int indexOfSensorData;
         //send in HealthApp
         [self writeHeartRateToHealthApp: (double) self.heartRate];
     }
+    return;
+}
+
+// Instance method to get the serial number of the device
+- (void) getSerialNumber:(CBCharacteristic *)characteristic
+{
+    NSString *serialNumber = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
+    self.serialNumber = [NSString stringWithFormat:@"Serial Number: %@", serialNumber];
     return;
 }
 
@@ -283,7 +295,7 @@ int indexOfSensorData;
     
     NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[sensorData objectAtIndex:1] timeIntervalSince1970]];
     
-    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
+    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"user\":\"%@\", \"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", self.serialNumber, [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
     
     [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
 }

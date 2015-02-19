@@ -18,6 +18,7 @@
 #define HEART_RATE_MEASUREMENT_SERVICE_UUID @"2A37"     // characteristic from 180D
 #define HEART_RATE_DEVICE_BODY_LOCATION_UUID @"2A38"    // characteristic from 180D
 #define DEVICE_MANUFACTURER_NAME_UUID @"2A29"           // characteristic from 180A
+#define DEVICE_SERIAL_NUMBER_UUID @"2A25"               // characteristic from 180A
 
 @interface SensorConnectionViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate, MQTTMessengerDelegate>
 {
@@ -42,6 +43,7 @@
 @property (nonatomic, strong) NSString *bodyData;
 @property (nonatomic, strong) NSString *manufacturer;
 @property (nonatomic, strong) NSString *deviceData;
+@property (nonatomic, strong) NSString *serialNumber;
 @property (assign) uint16_t heartRate;
 
 // Instance method to get the heart rate BPM information
