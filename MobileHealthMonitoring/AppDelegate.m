@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "SensorConnectionViewController.h"
+#import "SSkeychain.h"
+
 @import HealthKit;
 
 @interface AppDelegate ()
@@ -192,6 +194,22 @@
             abort();
         }
     }
+}
+
+#pragma mark UUID helper methods
+-(NSString *)getUUID
+{
+    
+    NSString *appName=[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
+    
+    NSString *strApplicationUUID = [SSKeychain passwordForService:appName account:@"incoding"];
+    if (strApplicationUUID == nil)
+    {
+        strApplicationUUID  = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [SSKeychain setPassword:strApplicationUUID forService:appName account:@"incoding"];
+    }
+    
+    return strApplicationUUID;
 }
 
 @end

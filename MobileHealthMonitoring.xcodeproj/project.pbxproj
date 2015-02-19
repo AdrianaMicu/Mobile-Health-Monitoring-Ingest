@@ -13,6 +13,9 @@
 		3A17F4A61A90C90C0091DD5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A17F4A41A90C90C0091DD5F /* LaunchScreen.xib */; };
 		3A17F4B21A90C90C0091DD5F /* MobileHealthMonitoringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */; };
 		3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17F4BB1A90E7450091DD5F /* MainViewController.m */; };
+		3AAA3F851A9608890026ED65 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAA3F841A9608890026ED65 /* Security.framework */; };
+		3AAA3F891A96092E0026ED65 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA3F881A96092E0026ED65 /* SSKeychain.m */; };
+		3AAA3F8C1A9609770026ED65 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA3F8B1A9609770026ED65 /* SSKeychainQuery.m */; };
 		3AD2BE781A92217800943541 /* libiosMQTT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD2BE771A92217800943541 /* libiosMQTT.a */; };
 		3AD2BE7B1A92219400943541 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD2BE7A1A92219400943541 /* HealthKit.framework */; };
 		3AD2BE801A9329B800943541 /* SensorData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AD2BE7F1A9329B800943541 /* SensorData.m */; };
@@ -48,6 +51,11 @@
 		3A17F4B11A90C90C0091DD5F /* MobileHealthMonitoringTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileHealthMonitoringTests.m; sourceTree = "<group>"; };
 		3A17F4BB1A90E7450091DD5F /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3A17F4BD1A90E7580091DD5F /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		3AAA3F841A9608890026ED65 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3AAA3F871A96092E0026ED65 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = SSKeychain/SSKeychain.h; sourceTree = "<group>"; };
+		3AAA3F881A96092E0026ED65 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = SSKeychain/SSKeychain.m; sourceTree = "<group>"; };
+		3AAA3F8A1A9609770026ED65 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = SSKeychain/SSKeychainQuery.h; sourceTree = "<group>"; };
+		3AAA3F8B1A9609770026ED65 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = SSKeychain/SSKeychainQuery.m; sourceTree = "<group>"; };
 		3AD2BE701A920CA400943541 /* MqttOCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MqttOCClient.h; path = MQTTLib/MqttOCClient.h; sourceTree = "<group>"; };
 		3AD2BE771A92217800943541 /* libiosMQTT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiosMQTT.a; path = Frameworks/libiosMQTT.a; sourceTree = "<group>"; };
 		3AD2BE7A1A92219400943541 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -70,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AAA3F851A9608890026ED65 /* Security.framework in Frameworks */,
 				3AD2BE781A92217800943541 /* libiosMQTT.a in Frameworks */,
 				3AD2BE7B1A92219400943541 /* HealthKit.framework in Frameworks */,
 			);
@@ -107,6 +116,7 @@
 		3A17F4911A90C90C0091DD5F /* MobileHealthMonitoring */ = {
 			isa = PBXGroup;
 			children = (
+				3AAA3F861A9609070026ED65 /* SSKeychain */,
 				3AD2BE901A932C1700943541 /* UI */,
 				3AD2BE7D1A93291A00943541 /* SQLite */,
 				3AD2BE7C1A93290C00943541 /* Utils */,
@@ -150,6 +160,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3AAA3F861A9609070026ED65 /* SSKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				3AAA3F8A1A9609770026ED65 /* SSKeychainQuery.h */,
+				3AAA3F8B1A9609770026ED65 /* SSKeychainQuery.m */,
+				3AAA3F871A96092E0026ED65 /* SSKeychain.h */,
+				3AAA3F881A96092E0026ED65 /* SSKeychain.m */,
+			);
+			name = SSKeychain;
+			sourceTree = "<group>";
+		};
 		3AD2BE6E1A920C1600943541 /* MQTTLib */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,6 +182,7 @@
 		3AD2BE761A92216D00943541 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3AAA3F841A9608890026ED65 /* Security.framework */,
 				3AD2BE7A1A92219400943541 /* HealthKit.framework */,
 				3AD2BE771A92217800943541 /* libiosMQTT.a */,
 			);
@@ -327,6 +349,8 @@
 				3AD2BE961A93776000943541 /* SensorDataDAO.m in Sources */,
 				3AD2BE871A932A4800943541 /* MQTTMessenger.m in Sources */,
 				3AD2BE841A932A2800943541 /* MobileHealthMonitoring.xcdatamodeld in Sources */,
+				3AAA3F891A96092E0026ED65 /* SSKeychain.m in Sources */,
+				3AAA3F8C1A9609770026ED65 /* SSKeychainQuery.m in Sources */,
 				3A17F49E1A90C90C0091DD5F /* SensorConnectionViewController.m in Sources */,
 				3AD2BE8C1A932A7300943541 /* main.m in Sources */,
 				3A17F4BC1A90E7450091DD5F /* MainViewController.m in Sources */,

@@ -24,6 +24,9 @@ int indexOfSensorData;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.deviceUUID = [appDelegate getUUID];
+    
     CBCentralManager *centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     self.centralManager = centralManager;
     
@@ -295,7 +298,7 @@ int indexOfSensorData;
     
     NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[sensorData objectAtIndex:1] timeIntervalSince1970]];
     
-    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"user\":\"%@\", \"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", self.serialNumber, [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
+    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"user\":\"%@\", \"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", self.deviceUUID, [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
     
     [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
 }
@@ -310,8 +313,6 @@ int indexOfSensorData;
     HKQuantity     *hkQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
     
     // Create the concrete sample
-//    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity startDate:[sensorData objectAtIndex:1] endDate:[sensorData objectAtIndex:1]];
-    
     HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:hkQuantityType quantity:hkQuantity startDate:now endDate:now];
     
     // Update the heart rate in the health store

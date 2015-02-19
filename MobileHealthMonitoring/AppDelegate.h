@@ -25,5 +25,7 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
+- (NSString *) getUUID;
+
 @end
 

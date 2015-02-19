@@ -25,6 +25,9 @@
     MQTTMessenger* mqttMessenger;
 }
 
+// Device UUID
+@property (nonatomic, strong) NSString* deviceUUID;
+
 // Backend
 @property (nonatomic, strong) MQTTMessenger* mqttMessenger;
 
@@ -42,7 +45,6 @@
 @property (nonatomic, strong) NSString *connected;
 @property (nonatomic, strong) NSString *bodyData;
 @property (nonatomic, strong) NSString *manufacturer;
-@property (nonatomic, strong) NSString *deviceData;
 @property (nonatomic, strong) NSString *serialNumber;
 @property (assign) uint16_t heartRate;
 
