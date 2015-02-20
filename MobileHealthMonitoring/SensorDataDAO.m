@@ -80,6 +80,23 @@
     return mutableFetchResults;
 }
 
+- (NSUInteger) getAllSensorDataCount
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"SensorData" inManagedObjectContext:context]];
+    
+    [request setIncludesSubentities:NO]; //Omit subentities. Default is YES (i.e. include subentities)
+    
+    NSError *err;
+    NSUInteger count = [context countForFetchRequest:request error:&err];
+    
+    if(count == NSNotFound) {
+
+    }
+    
+    return count;
+}
+
 - (void)deleteSensorData:(NSManagedObject *)target
 {
     [context deleteObject:target];

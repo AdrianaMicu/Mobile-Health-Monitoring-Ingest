@@ -237,22 +237,29 @@ int indexOfSensorData;
 - (void) sendPersistedSensorDataToBackend
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int count = 0;
         do {
-            self.allSensorData = [self getAllSensorData];
-        } while ([self.allSensorData count] < 50); // 1000
-        
-        //int nr = [self.allSensorData count];
+            [NSThread sleepForTimeInterval:10];
+            count = (int)[self getAllSensorDataCount];
+        } while (count < 500); // 1000
         
         // send to Cloud
         indexOfSensorData = 0;
+        self.allSensorData = [self getAllSensorData];
         [self startSendingData];
     });
-}
-
-- (NSMutableArray *) getAllSensorData
-{
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate.sensorDataDAO getAllSensorData];
+    
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        do {
+//            self.allSensorData = [self getAllSensorData];
+//        } while ([self.allSensorData count] < 500); // 1000
+//        
+//        //int nr = [self.allSensorData count];
+//        
+//        // send to Cloud
+//        indexOfSensorData = 0;
+//        [self startSendingData];
+//    });
 }
 
 // started from sendPersistedSensorDataToBackend, and then notified by MQTT Publish Success Callback
@@ -298,7 +305,7 @@ int indexOfSensorData;
     
     NSString * timeStampValue = [NSString stringWithFormat:@"%ld", (long)[[sensorData objectAtIndex:1] timeIntervalSince1970]];
     
-    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"user\":\"%@\", \"type\":\"heartrate\", \"value\":\"%f\", \"timestamp\":\"%@\"}}", self.deviceUUID, [[sensorData objectAtIndex:0] doubleValue], timeStampValue];
+    NSString *payload = [NSString stringWithFormat: @"{\"d\":{\"user\":\"%@\", \"type\":\"heartrate\", \"value\":\"%ld\", \"timestamp\":\"%@\"}}", self.deviceUUID, (long)[[sensorData objectAtIndex:0] integerValue], timeStampValue];
     
     [[MQTTMessenger sharedMessenger] publish:topic payload:payload qos:0 retained:TRUE];
 }
@@ -342,6 +349,18 @@ int indexOfSensorData;
      AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [appDelegate.sensorDataDAO deleteSensorData: sensorData];
+}
+
+- (NSMutableArray *) getAllSensorData
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate.sensorDataDAO getAllSensorData];
+}
+
+- (NSUInteger) getAllSensorDataCount
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate.sensorDataDAO getAllSensorDataCount];
 }
 
 @end

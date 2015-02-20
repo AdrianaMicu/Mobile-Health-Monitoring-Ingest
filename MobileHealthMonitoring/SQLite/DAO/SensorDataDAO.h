@@ -22,6 +22,7 @@
 -(SensorData *) insertNewSensorData;
 -(NSMutableArray *) getAllSensorData;
 - (void)deleteSensorData:(NSManagedObject *)target;
+- (NSUInteger) getAllSensorDataCount;
 
 @end
 
